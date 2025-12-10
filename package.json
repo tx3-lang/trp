@@ -1,0 +1,12 @@
+{
+  "name": "trp-openrpc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TRP OpenRPC spec and generator harness",
+  "scripts": {
+    "generate:rust": "npx @open-rpc/generator --schema ./specs/trp.json --client rust --out ./codegen/generated/rust"
+  },
+  "devDependencies": {
+    "@open-rpc/generator": "^1.61.2"
+  }
+}

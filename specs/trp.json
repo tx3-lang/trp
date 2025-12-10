@@ -1,0 +1,53 @@
+{
+  "openrpc": "1.3.2",
+  "info": {
+    "title": "Transaction Resolver Protocol",
+    "version": "0.1.0",
+    "description": "Placeholder OpenRPC schema for TRP."
+  },
+  "servers": [
+    {
+      "name": "local",
+      "url": "http://localhost:8545"
+    }
+  ],
+  "methods": [
+    {
+      "name": "resolveTransaction",
+      "summary": "Resolve a transaction hash into canonical transaction data.",
+      "description": "Takes a transaction hash or opaque identifier and returns a structured payload for the transaction.",
+      "params": [
+        {
+          "name": "transactionId",
+          "required": true,
+          "description": "Opaque transaction identifier.",
+          "schema": { "type": "string" }
+        },
+        {
+          "name": "network",
+          "required": true,
+          "description": "Network or chain identifier.",
+          "schema": { "type": "string" }
+        }
+      ],
+      "result": {
+        "name": "resolution",
+        "description": "Resolution outcome containing the transaction payload.",
+        "schema": { "type": "object" }
+      }
+    },
+    {
+      "name": "health",
+      "summary": "Simple readiness probe for nodes implementing TRP.",
+      "params": [],
+      "result": {
+        "name": "status",
+        "description": "A short status message.",
+        "schema": { "type": "string" }
+      }
+    }
+  ],
+  "components": {
+    "schemas": {}
+  }
+}
