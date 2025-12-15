@@ -2,7 +2,7 @@
 {% for t in types %}
 export interface {{ ctx.type_name(t.name) }} {
 {%- for f in t.fields %}
-    {{ f.ts_name() }}{{ "?" if !f.required }}: {{ f.ts_type(ctx) }};
+    {{ f.ts_name() }}: {{ f.ts_type(ctx) }};
 {%- endfor %}
 }
 

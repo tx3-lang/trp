@@ -18,7 +18,7 @@ pub struct GenArgs {
     #[arg(long, value_delimiter = ',')]
     pub lang: Vec<String>,
     /// Output directory
-    #[arg(long, default_value = "bindings")]
+    #[arg(long, default_value = "codegen")]
     pub out: PathBuf,
     /// Clean output directory before generating
     #[arg(long, default_value_t = false)]
@@ -122,6 +122,14 @@ struct GoTemplate<'a> {
 struct RustTemplate<'a> {
     types: &'a [ResolvedType],
     ctx: &'a LanguageContext,
+}
+
+mod filters {
+    use crate::resolver::ResolvedField;
+
+    pub fn length(value: &Vec<ResolvedField>) -> Result<usize, askama::Error> {
+        Ok(value.len())
+    }
 }
 
 // Helper methods exposed to templates

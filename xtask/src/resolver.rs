@@ -1,9 +1,11 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Deref as _};
 
 use anyhow::{Context, Result};
 use schemars::schema::{
     ArrayValidation, InstanceType, ObjectValidation, Schema, SchemaObject, SubschemaValidation,
 };
+
+use crate::openrpc::OpenRpc;
 
 #[derive(Clone, Debug)]
 pub struct ResolvedType {
@@ -104,11 +106,9 @@ pub fn object_additional_properties(object: &ObjectValidation) -> Option<SchemaO
     object
         .additional_properties
         .as_ref()
-        .and_then(|props| match props {
-            schemars::schema::AdditionalProperties::Schema(schema) => {
-                Some(normalize_schema(schema))
-            }
-            schemars::schema::AdditionalProperties::Bool(true) => Some(SchemaObject {
+        .and_then(|props| match props.deref() {
+            schemars::schema::Schema::Object(schema) => Some(schema.clone()),
+            schemars::schema::Schema::Bool(true) => Some(SchemaObject {
                 instance_type: Some(vec![InstanceType::Object].into()),
                 ..Default::default()
             }),

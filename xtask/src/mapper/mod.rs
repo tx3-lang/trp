@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Deref as _};
 
 use schemars::schema::{InstanceType, SchemaObject};
 
@@ -68,7 +68,7 @@ pub fn map_reference(schema: &SchemaObject, ctx: &LanguageContext) -> Option<Str
 pub fn map_primitive(schema: &SchemaObject) -> Option<InstanceType> {
     match &schema.instance_type {
         Some(types) => match types {
-            schemars::schema::SingleOrVec::Single(t) => Some(*t),
+            schemars::schema::SingleOrVec::Single(t) => Some(t.deref().clone()),
             schemars::schema::SingleOrVec::Vec(list) => list.first().copied(),
         },
         None => None,
