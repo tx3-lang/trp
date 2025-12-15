@@ -108,16 +108,19 @@
   "components": {
     "schemas": {
       "ArgValue": {
+        "title": "ArgValue",
         "description": "TIR argument value.",
         "type": ["string", "number", "boolean", "array", "object", "null"]
       },
       "ArgMap": {
+        "title": "ArgMap",
         "type": "object",
         "additionalProperties": {
           "$ref": "#/components/schemas/ArgValue"
         }
       },
       "BytesEnvelope": {
+        "title": "BytesEnvelope",
         "type": "object",
         "properties": {
           "encoding": {
@@ -130,6 +133,7 @@
         "required": ["encoding", "payload"]
       },
       "SubmitResponse": {
+        "title": "SubmitResponse",
         "type": "object",
         "properties": {
           "hash": {
@@ -139,6 +143,7 @@
         "required": ["hash"]
       },
       "TxEnvelope": {
+        "title": "TxEnvelope",
         "type": "object",
         "properties": {
           "tx": {
@@ -153,6 +158,7 @@
         "required": ["tx", "hash"]
       },
       "TirInfo": {
+        "title": "TirInfo",
         "type": "object",
         "properties": {
           "version": {
@@ -169,6 +175,7 @@
         "required": ["version", "bytecode", "encoding"]
       },
       "SubmitWitness": {
+        "title": "SubmitWitness",
         "type": "object",
         "properties": {
           "type": {
@@ -185,6 +192,7 @@
         "required": ["type", "key", "signature"]
       },
       "UnsupportedTirDiagnostic": {
+        "title": "UnsupportedTirDiagnostic",
         "type": "object",
         "properties": {
           "provided": {
@@ -197,6 +205,7 @@
         "required": ["provided", "expected"]
       },
       "MissingTxArgDiagnostic": {
+        "title": "MissingTxArgDiagnostic",
         "type": "object",
         "properties": {
           "key": {
@@ -209,6 +218,7 @@
         "required": ["key", "type"]
       },
       "SearchSpaceDiagnostic": {
+        "title": "SearchSpaceDiagnostic",
         "type": "object",
         "properties": {
           "matched": {
@@ -230,6 +240,7 @@
         "required": ["matched"]
       },
       "InputQueryDiagnostic": {
+        "title": "InputQueryDiagnostic",
         "type": "object",
         "properties": {
           "address": {
@@ -257,6 +268,7 @@
         "required": ["min_amount", "refs", "support_many", "collateral"]
       },
       "InputNotResolvedDiagnostic": {
+        "title": "InputNotResolvedDiagnostic",
         "type": "object",
         "properties": {
           "name": {
@@ -272,6 +284,7 @@
         "required": ["name", "query", "search_space"]
       },
       "TxScriptFailureDiagnostic": {
+        "title": "TxScriptFailureDiagnostic",
         "type": "object",
         "properties": {
           "logs": {
