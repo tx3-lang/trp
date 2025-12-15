@@ -1,0 +1,12 @@
+{
+  "name": "trp-types",
+  "version": "{{ metadata.version }}",
+  "description": "OpenRPC schema inferred from the TRP Rust client implementation.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trp-protocol/trp.git"
+  },
+  "main": "./types.ts",
+  "types": "./types.ts"
+}

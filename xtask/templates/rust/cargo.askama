@@ -1,0 +1,13 @@
+[package]
+name = "trp-types"
+version = "{{ metadata.version }}"
+edition = "2021"
+description = "OpenRPC schema inferred from the TRP Rust client implementation."
+license = "Apache-2.0"
+repository = "https://github.com/trp-protocol/trp"
+
+[lib]
+path = "types.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }

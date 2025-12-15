@@ -5,7 +5,7 @@ This repository hosts the OpenRPC specification for the Transaction Resolver Pro
 ## Layout
 
 - `specs/trp.json`: OpenRPC schema for the Transation Resolver Protocol (TRP).
-- `codegen/{lang}`: Output directory for generated artifacts (empty until you run the generator).
+- `bindings/{lang}`: Output directory for generated artifacts (created when you run the generator).
 - `xtask`: Rust crate to serve as CLI for code generation
 
 ## Code Generation
@@ -30,5 +30,7 @@ Generate bindings for all supported languages:
 cargo run --package xtask -- gen --lang ts,python,go,rust
 ```
 
-The generated files will be placed in `bindings/{lang}/types.{ext}` (e.g., `bindings/ts/types.ts`, `bindings/python/types.py`).
+The generated files will be placed in `bindings/{lang}/types.{ext}` (e.g., `bindings/ts/types.ts`, `bindings/python/types.py`), and
+each language directory will also include a manifest (`package.json`, `pyproject.toml`, `go.mod`, or `Cargo.toml`) referencing the
+generated types.
 
