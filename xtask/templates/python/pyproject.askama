@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trp-types"
+version = "{{ metadata.version }}"
+description = "OpenRPC schema inferred from the TRP Rust client implementation."
+license = {text = "Apache-2.0"}
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/trp-protocol/trp"
+
+[tool.setuptools]
+py-modules = ["types"]

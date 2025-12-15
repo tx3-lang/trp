@@ -15,6 +15,7 @@ pub struct OpenRpc {
 pub struct Info {
     pub title: Option<String>,
     pub version: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
