@@ -15,29 +15,12 @@
     {
       "name": "trp.resolve",
       "summary": "Resolve a proto transaction into a signed transaction envelope.",
-      "params": [
-        {
-          "name": "tir",
-          "required": true,
-          "schema": {
-            "$ref": "#/components/schemas/TirInfo"
-          }
-        },
-        {
-          "name": "args",
-          "required": true,
-          "schema": {
-            "$ref": "#/components/schemas/ArgMap"
-          }
-        },
-        {
-          "name": "env",
-          "required": false,
-          "schema": {
-            "$ref": "#/components/schemas/ArgMap"
-          }
+      "params": {
+        "name": "ResolveParams",
+        "schema": {
+          "$ref": "#/components/schemas/ResolveParams"
         }
-      ],
+      },
       "result": {
         "name": "TxEnvelope",
         "schema": {
@@ -78,25 +61,12 @@
     {
       "name": "trp.submit",
       "summary": "Submit a resolved transaction with witnesses.",
-      "params": [
-        {
-          "name": "tx",
-          "required": true,
-          "schema": {
-            "$ref": "#/components/schemas/BytesEnvelope"
-          }
-        },
-        {
-          "name": "witnesses",
-          "required": true,
-          "schema": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SubmitWitness"
-            }
-          }
+      "params": {
+        "name": "SubmitParams",
+        "schema": {
+          "$ref": "#/components/schemas/SubmitParams"
         }
-      ],
+      },
       "result": {
         "name": "SubmitResponse",
         "schema": {
@@ -107,18 +77,6 @@
   ],
   "components": {
     "schemas": {
-      "ArgValue": {
-        "title": "ArgValue",
-        "description": "TIR argument value.",
-        "type": ["string", "number", "boolean", "array", "object", "null"]
-      },
-      "ArgMap": {
-        "title": "ArgMap",
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/ArgValue"
-        }
-      },
       "BytesEnvelope": {
         "title": "BytesEnvelope",
         "type": "object",
@@ -130,7 +88,10 @@
             "type": "string"
           }
         },
-        "required": ["encoding", "payload"]
+        "required": [
+          "encoding",
+          "payload"
+        ]
       },
       "SubmitResponse": {
         "title": "SubmitResponse",
@@ -140,7 +101,9 @@
             "type": "string"
           }
         },
-        "required": ["hash"]
+        "required": [
+          "hash"
+        ]
       },
       "TxEnvelope": {
         "title": "TxEnvelope",
@@ -155,7 +118,10 @@
             "description": "Transaction hash"
           }
         },
-        "required": ["tx", "hash"]
+        "required": [
+          "tx",
+          "hash"
+        ]
       },
       "TirInfo": {
         "title": "TirInfo",
@@ -172,7 +138,11 @@
             "description": "Encoding for the TIR bytecode, e.g. base64 or hex"
           }
         },
-        "required": ["version", "bytecode", "encoding"]
+        "required": [
+          "version",
+          "bytecode",
+          "encoding"
+        ]
       },
       "SubmitWitness": {
         "title": "SubmitWitness",
@@ -180,7 +150,9 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["vkey"]
+            "enum": [
+              "vkey"
+            ]
           },
           "key": {
             "$ref": "#/components/schemas/BytesEnvelope"
@@ -189,7 +161,11 @@
             "$ref": "#/components/schemas/BytesEnvelope"
           }
         },
-        "required": ["type", "key", "signature"]
+        "required": [
+          "type",
+          "key",
+          "signature"
+        ]
       },
       "UnsupportedTirDiagnostic": {
         "title": "UnsupportedTirDiagnostic",
@@ -202,7 +178,10 @@
             "type": "string"
           }
         },
-        "required": ["provided", "expected"]
+        "required": [
+          "provided",
+          "expected"
+        ]
       },
       "MissingTxArgDiagnostic": {
         "title": "MissingTxArgDiagnostic",
@@ -215,7 +194,10 @@
             "type": "string"
           }
         },
-        "required": ["key", "type"]
+        "required": [
+          "key",
+          "type"
+        ]
       },
       "SearchSpaceDiagnostic": {
         "title": "SearchSpaceDiagnostic",
@@ -228,23 +210,37 @@
             }
           },
           "by_address_count": {
-            "type": ["integer", "null"]
+            "type": [
+              "integer",
+              "null"
+            ]
           },
           "by_asset_class_count": {
-            "type": ["integer", "null"]
+            "type": [
+              "integer",
+              "null"
+            ]
           },
           "by_ref_count": {
-            "type": ["integer", "null"]
+            "type": [
+              "integer",
+              "null"
+            ]
           }
         },
-        "required": ["matched"]
+        "required": [
+          "matched"
+        ]
       },
       "InputQueryDiagnostic": {
         "title": "InputQueryDiagnostic",
         "type": "object",
         "properties": {
           "address": {
-            "type": ["string", "null"]
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "min_amount": {
             "type": "object",
@@ -265,7 +261,12 @@
             "type": "boolean"
           }
         },
-        "required": ["min_amount", "refs", "support_many", "collateral"]
+        "required": [
+          "min_amount",
+          "refs",
+          "support_many",
+          "collateral"
+        ]
       },
       "InputNotResolvedDiagnostic": {
         "title": "InputNotResolvedDiagnostic",
@@ -281,7 +282,11 @@
             "$ref": "#/components/schemas/SearchSpaceDiagnostic"
           }
         },
-        "required": ["name", "query", "search_space"]
+        "required": [
+          "name",
+          "query",
+          "search_space"
+        ]
       },
       "TxScriptFailureDiagnostic": {
         "title": "TxScriptFailureDiagnostic",
@@ -294,7 +299,48 @@
             }
           }
         },
-        "required": ["logs"]
+        "required": [
+          "logs"
+        ]
+      },
+      "SubmitParams": {
+        "title": "SubmitParams",
+        "type": "object",
+        "properties": {
+          "tx": {
+            "$ref": "#/components/schemas/BytesEnvelope"
+          },
+          "witnesses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubmitWitness"
+            }
+          }
+        },
+        "required": [
+          "tx",
+          "witnesses"
+        ]
+      },
+      "ResolveParams": {
+        "title": "ResolveParams",
+        "type": "object",
+        "properties": {
+          "tir": {
+            "$ref": "#/components/schemas/TirInfo"
+          },
+          "args": {
+            "type": "object"
+          },
+          "env": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "tir",
+          "args",
+          "env"
+        ]
       }
     }
   }

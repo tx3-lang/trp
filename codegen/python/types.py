@@ -4,15 +4,27 @@ from typing import Any, Dict, List, Optional, Union, Literal
 
 
 @dataclass
-class UnsupportedTirDiagnostic:
-    expected: str
-    provided: str
+class SubmitParams:
+    tx: BytesEnvelope
+    witnesses: List[SubmitWitness]
 
 
 @dataclass
-class MissingTxArgDiagnostic:
-    key: str
-    type: str
+class TxEnvelope:
+    hash: str
+    tx: str
+
+
+@dataclass
+class TirInfo:
+    bytecode: str
+    encoding: str
+    version: str
+
+
+@dataclass
+class SubmitResponse:
+    hash: str
 
 
 @dataclass
@@ -21,6 +33,12 @@ class SearchSpaceDiagnostic:
     by_asset_class_count: Optional[int]
     by_ref_count: Optional[int]
     matched: List[str]
+
+
+@dataclass
+class BytesEnvelope:
+    encoding: str
+    payload: str
 
 
 @dataclass
@@ -33,15 +51,10 @@ class InputQueryDiagnostic:
 
 
 @dataclass
-class InputNotResolvedDiagnostic:
-    name: str
-    query: InputQueryDiagnostic
-    search_space: SearchSpaceDiagnostic
-
-
-@dataclass
-class TxScriptFailureDiagnostic:
-    logs: List[str]
+class ResolveParams:
+    args: Dict[str, Any]
+    env: Dict[str, Any]
+    tir: TirInfo
 
 
 @dataclass
@@ -52,35 +65,25 @@ class SubmitWitness:
 
 
 @dataclass
-class TxEnvelope:
-    hash: str
-    tx: str
+class UnsupportedTirDiagnostic:
+    expected: str
+    provided: str
 
 
 @dataclass
-class BytesEnvelope:
-    encoding: str
-    payload: str
+class InputNotResolvedDiagnostic:
+    name: str
+    query: InputQueryDiagnostic
+    search_space: SearchSpaceDiagnostic
 
 
 @dataclass
-class SubmitResponse:
-    hash: str
+class MissingTxArgDiagnostic:
+    key: str
+    type: str
 
 
 @dataclass
-class ArgValue:
-    pass
-
-
-@dataclass
-class TirInfo:
-    bytecode: str
-    encoding: str
-    version: str
-
-
-@dataclass
-class ArgMap:
-    pass
+class TxScriptFailureDiagnostic:
+    logs: List[str]
 

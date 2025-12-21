@@ -3,20 +3,38 @@ use serde::{Deserialize, Serialize};
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UnsupportedTirDiagnostic {
-    #[serde(rename = "expected")]
-    pub expected: String,
-    #[serde(rename = "provided")]
-    pub provided: String,
+pub struct SubmitParams {
+    #[serde(rename = "tx")]
+    pub tx: BytesEnvelope,
+    #[serde(rename = "witnesses")]
+    pub witnesses: Vec<SubmitWitness>,
 }
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MissingTxArgDiagnostic {
-    #[serde(rename = "key")]
-    pub key: String,
-    #[serde(rename = "type")]
-    pub type: String,
+pub struct TxEnvelope {
+    #[serde(rename = "hash")]
+    pub hash: String,
+    #[serde(rename = "tx")]
+    pub tx: String,
+}
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TirInfo {
+    #[serde(rename = "bytecode")]
+    pub bytecode: String,
+    #[serde(rename = "encoding")]
+    pub encoding: String,
+    #[serde(rename = "version")]
+    pub version: String,
+}
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubmitResponse {
+    #[serde(rename = "hash")]
+    pub hash: String,
 }
 
 
@@ -30,6 +48,15 @@ pub struct SearchSpaceDiagnostic {
     pub by_ref_count: Option<i64>,
     #[serde(rename = "matched")]
     pub matched: Vec<String>,
+}
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BytesEnvelope {
+    #[serde(rename = "encoding")]
+    pub encoding: String,
+    #[serde(rename = "payload")]
+    pub payload: String,
 }
 
 
@@ -49,20 +76,13 @@ pub struct InputQueryDiagnostic {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InputNotResolvedDiagnostic {
-    #[serde(rename = "name")]
-    pub name: String,
-    #[serde(rename = "query")]
-    pub query: InputQueryDiagnostic,
-    #[serde(rename = "search_space")]
-    pub search_space: SearchSpaceDiagnostic,
-}
-
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TxScriptFailureDiagnostic {
-    #[serde(rename = "logs")]
-    pub logs: Vec<String>,
+pub struct ResolveParams {
+    #[serde(rename = "args")]
+    pub args: std::collections::HashMap<String, serde_json::Value>,
+    #[serde(rename = "env")]
+    pub env: std::collections::HashMap<String, serde_json::Value>,
+    #[serde(rename = "tir")]
+    pub tir: TirInfo,
 }
 
 
@@ -78,47 +98,37 @@ pub struct SubmitWitness {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TxEnvelope {
-    #[serde(rename = "hash")]
-    pub hash: String,
-    #[serde(rename = "tx")]
-    pub tx: String,
+pub struct UnsupportedTirDiagnostic {
+    #[serde(rename = "expected")]
+    pub expected: String,
+    #[serde(rename = "provided")]
+    pub provided: String,
 }
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BytesEnvelope {
-    #[serde(rename = "encoding")]
-    pub encoding: String,
-    #[serde(rename = "payload")]
-    pub payload: String,
+pub struct InputNotResolvedDiagnostic {
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "query")]
+    pub query: InputQueryDiagnostic,
+    #[serde(rename = "search_space")]
+    pub search_space: SearchSpaceDiagnostic,
 }
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SubmitResponse {
-    #[serde(rename = "hash")]
-    pub hash: String,
+pub struct MissingTxArgDiagnostic {
+    #[serde(rename = "key")]
+    pub key: String,
+    #[serde(rename = "type")]
+    pub type: String,
 }
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ArgValue {
-}
-
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TirInfo {
-    #[serde(rename = "bytecode")]
-    pub bytecode: String,
-    #[serde(rename = "encoding")]
-    pub encoding: String,
-    #[serde(rename = "version")]
-    pub version: String,
-}
-
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ArgMap {
+pub struct TxScriptFailureDiagnostic {
+    #[serde(rename = "logs")]
+    pub logs: Vec<String>,
 }
 

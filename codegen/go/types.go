@@ -2,15 +2,27 @@
 package types
 
 
-type UnsupportedTirDiagnostic struct {
-    Expected string `json:"expected"`
-    Provided string `json:"provided"`
+type SubmitParams struct {
+    Tx BytesEnvelope `json:"tx"`
+    Witnesses []SubmitWitness `json:"witnesses"`
 }
 
 
-type MissingTxArgDiagnostic struct {
-    Key string `json:"key"`
-    Type string `json:"type"`
+type TxEnvelope struct {
+    Hash string `json:"hash"`
+    Tx string `json:"tx"`
+}
+
+
+type TirInfo struct {
+    Bytecode string `json:"bytecode"`
+    Encoding string `json:"encoding"`
+    Version string `json:"version"`
+}
+
+
+type SubmitResponse struct {
+    Hash string `json:"hash"`
 }
 
 
@@ -19,6 +31,12 @@ type SearchSpaceDiagnostic struct {
     ByAssetClassCount int64 `json:"by_asset_class_count"`
     ByRefCount int64 `json:"by_ref_count"`
     Matched []string `json:"matched"`
+}
+
+
+type BytesEnvelope struct {
+    Encoding string `json:"encoding"`
+    Payload string `json:"payload"`
 }
 
 
@@ -31,15 +49,10 @@ type InputQueryDiagnostic struct {
 }
 
 
-type InputNotResolvedDiagnostic struct {
-    Name string `json:"name"`
-    Query InputQueryDiagnostic `json:"query"`
-    SearchSpace SearchSpaceDiagnostic `json:"search_space"`
-}
-
-
-type TxScriptFailureDiagnostic struct {
-    Logs []string `json:"logs"`
+type ResolveParams struct {
+    Args map[string]interface{} `json:"args"`
+    Env map[string]interface{} `json:"env"`
+    Tir TirInfo `json:"tir"`
 }
 
 
@@ -50,34 +63,26 @@ type SubmitWitness struct {
 }
 
 
-type TxEnvelope struct {
-    Hash string `json:"hash"`
-    Tx string `json:"tx"`
+type UnsupportedTirDiagnostic struct {
+    Expected string `json:"expected"`
+    Provided string `json:"provided"`
 }
 
 
-type BytesEnvelope struct {
-    Encoding string `json:"encoding"`
-    Payload string `json:"payload"`
+type InputNotResolvedDiagnostic struct {
+    Name string `json:"name"`
+    Query InputQueryDiagnostic `json:"query"`
+    SearchSpace SearchSpaceDiagnostic `json:"search_space"`
 }
 
 
-type SubmitResponse struct {
-    Hash string `json:"hash"`
+type MissingTxArgDiagnostic struct {
+    Key string `json:"key"`
+    Type string `json:"type"`
 }
 
 
-type ArgValue struct {
-}
-
-
-type TirInfo struct {
-    Bytecode string `json:"bytecode"`
-    Encoding string `json:"encoding"`
-    Version string `json:"version"`
-}
-
-
-type ArgMap struct {
+type TxScriptFailureDiagnostic struct {
+    Logs []string `json:"logs"`
 }
 
