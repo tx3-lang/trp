@@ -1,34 +1,31 @@
-# TRP (Transaction Resolver Protocol)
+# Transaction Resolver Protocol (TRP)
 
-This repository hosts the OpenRPC specification for the Transaction Resolver Protocol (TRP) and code generation for types and stubs in each of the supported languages.
+The **Transaction Resolver Protocol (TRP)** is the wire protocol that backends speak to resolve and submit [Tx3](https://github.com/tx3-lang/tx3) transactions. It is defined as an [OpenRPC](https://open-rpc.org/) document.
 
-## Layout
+A consumer with a compiled TIR envelope (produced by the Tx3 compiler) and a set of arguments calls `trp.resolve` on a TRP-speaking backend; the backend returns a transaction envelope that the consumer can sign and submit back via `trp.submit`. Additional methods cover mempool inspection and status checks.
 
-- `specs/trp.json`: OpenRPC schema for the Transation Resolver Protocol (TRP).
-- `codegen/{lang}`: Output directory for generated artifacts (empty until you run the generator).
-- `xtask`: Rust crate to serve as CLI for code generation
+## Spec versions
 
-## Code Generation
+- `v1beta0/trp.json` — current stable OpenRPC spec. Self-contained (no external `$ref`s).
 
-To generate language bindings from the OpenRPC specification, use the `xtask gen` command:
+## Methods
 
-```bash
-cargo run --package xtask -- gen --lang ts,python,go,rust
-```
+- `trp.resolve` — resolve a TIR + args into a signed transaction envelope.
+- `trp.submit` — submit a resolved transaction with witnesses.
+- `trp.checkStatus` — check status of transactions in the mempool.
+- `trp.dumpLogs` — page through finalized transaction logs.
+- `trp.peekPending` / `trp.peekInflight` — inspect the mempool.
 
-### Options
+See `v1beta0/trp.json` for full schemas, parameter types, and error codes.
 
-- `--openrpc <path>`: Path to the OpenRPC specification file (default: `specs/trp.json`)
-- `--lang <languages>`: Comma-separated list of languages to generate. Supported languages: `ts`, `python`, `go`, `rust` (e.g., `--lang ts,python`)
-- `--out <path>`: Output directory for generated files (default: `bindings`)
-- `--clean`: Clean the output directory before generating new files
+## Relationship to TII
 
-### Examples
+The [Transaction Invocation Interface (TII)](https://github.com/tx3-lang/tii) describes *what* transactions a protocol exposes; TRP describes the wire protocol used to actually resolve and submit them. A consumer typically reads a TII document, gathers parameter values from the user, and then calls `trp.resolve` with the TIR envelope from TII and the collected `args`.
 
-Generate bindings for all supported languages:
-```bash
-cargo run --package xtask -- gen --lang ts,python,go,rust
-```
+## Reference implementation
 
-The generated files will be placed in `bindings/{lang}/types.{ext}` (e.g., `bindings/ts/types.ts`, `bindings/python/types.py`).
+The `tx3-resolver` crate in [tx3-lang/tx3](https://github.com/tx3-lang/tx3/tree/main/crates/tx3-resolver) is a Rust client implementation of TRP and is the canonical consumer of this spec.
 
+## License
+
+Apache 2.0. See [`LICENSE`](./LICENSE).
