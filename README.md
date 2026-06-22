@@ -22,6 +22,10 @@ See `v1beta0/trp.json` for full schemas, parameter types, and error codes.
 
 The [Transaction Invocation Interface (TII)](https://github.com/tx3-lang/tii) describes *what* transactions a protocol exposes; TRP describes the wire protocol used to actually resolve and submit them. A consumer typically reads a TII document, gathers parameter values from the user, and then calls `trp.resolve` with the TIR envelope from TII and the collected `args`.
 
+### Argument encoding
+
+The TIR carried in the resolve request is **untyped** — the full type information lives only in the `.tii`, a client-side artifact. So for a parameter of an aggregate type (a record, `List`, `Map`, or `Tuple`), the **client is authoritative**: it uses its `.tii` type knowledge to serialize the value into the deterministic, self-describing `TaggedArg` wire form (see the `TaggedArg` schema in `v1beta0/trp.json`). Every node is tagged and struct fields are positionally ordered, so the resolver decodes and applies the value **without a schema** — it only checks that the tag's kind matches the param's flat TIR type and that tags are well-formed. Scalar arguments stay bare and type-directed. Authority for type correctness sits in the client + `.tii`; the server applies deterministically.
+
 ## Reference implementation
 
 The `tx3-resolver` crate in [tx3-lang/tx3](https://github.com/tx3-lang/tx3/tree/main/crates/tx3-resolver) is a Rust client implementation of TRP and is the canonical consumer of this spec.
