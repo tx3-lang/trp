@@ -207,8 +207,136 @@
       "ArgMap": {
         "title": "ArgMap",
         "type": "object",
-        "description": "Flexible key-value arguments for transaction execution",
+        "description": "Key-value arguments for transaction execution, keyed by parameter name. A value of a scalar type MAY be sent bare (a plain JSON number/bool/string, coerced server-side via the param's flat TIR type). A value of an aggregate type (record, list, tuple, map) is a self-describing `TaggedArg` (see that schema): the client is authoritative — it serializes the value from its `.tii` type knowledge into a fully-tagged form, and the resolver applies it deterministically without a schema. Values are permissive (`additionalProperties: true`) so bare scalars and `TaggedArg` values coexist in the same map.",
         "additionalProperties": true
+      },
+      "TaggedArg": {
+        "title": "TaggedArg",
+        "description": "Self-describing, recursive wire encoding for an argument value. Single-key tagged: exactly one of the keys below is present, naming the value's kind. The client (each SDK; `cshell`/`trix` ride the Rust SDK) builds this from the `.tii` type, so the server needs no element types, no field order, and no constructor map — it decodes structurally and trusts the encoding. Every node inside an aggregate value MUST be tagged; scalar leaves reuse the same per-scalar wire encodings the resolver already accepts (`int`/`bytes`/`address`/`utxoRef`). A top-level scalar arg MAY instead be sent bare (see `ArgMap`).",
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["int"],
+            "properties": {
+              "int": {
+                "description": "Integer leaf. A JSON number, a decimal string (for values beyond JSON-safe integers), or a `0x`-prefixed big-endian hex string — the existing int wire encoding.",
+                "type": ["number", "string"]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["bool"],
+            "properties": { "bool": { "type": "boolean" } }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["string"],
+            "properties": {
+              "string": {
+                "description": "String leaf. Used chiefly for map keys: a `Map`'s `.tii` schema (`object` + `additionalProperties`) erases the key's Tx3 type, so JSON-object keys arrive as untyped strings and are carried as-is.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["bytes"],
+            "properties": {
+              "bytes": {
+                "description": "Bytes leaf. A hex string (optionally `0x`-prefixed) or a `BytesEnvelope` object — the existing bytes wire encoding.",
+                "type": ["string", "object"]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["address"],
+            "properties": {
+              "address": {
+                "description": "Address leaf. A bech32 or hex string.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["utxoRef"],
+            "properties": {
+              "utxoRef": {
+                "description": "UTxO reference leaf, `txid#index`.",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["list"],
+            "properties": {
+              "list": {
+                "description": "Homogeneous, variable-length sequence.",
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/TaggedArg" }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tuple"],
+            "properties": {
+              "tuple": {
+                "description": "Fixed-length, positionally-typed sequence.",
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/TaggedArg" }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["map"],
+            "properties": {
+              "map": {
+                "description": "Array of `[key, value]` pairs. Keys may be non-string, so a JSON object cannot represent the general case.",
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TaggedArg" },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["struct"],
+            "properties": {
+              "struct": {
+                "description": "A record or a resolved variant case. `constructor` is the case index from the `.tii` `oneOf` ordering (0 for a single-case record); `fields` are positional, ordered exactly as the `.tii` declares the case (the `required` array order, which `tx3c` emits in source-declaration order).",
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["constructor", "fields"],
+                "properties": {
+                  "constructor": { "type": "integer", "minimum": 0 },
+                  "fields": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/TaggedArg" }
+                  }
+                }
+              }
+            }
+          }
+        ]
       },
       "EnvMap": {
         "title": "EnvMap",
